@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=vigil
+      - POSTGRES_PASSWORD=vigil
+      - POSTGRES_DB=vigil
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  temporal:
+    image: temporalio/auto-setup:1.24.1
+    ports:
+      - "7233:7233" # Temporal gRPC port
+      - "8233:8233" # Temporal UI port
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=vigil
+      - POSTGRES_PWD=vigil
+      - POSTGRES_SEEDS=db
+    depends_on:
+      - db
+    volumes:
+      - temporal_config:/etc/temporal/config/dynamicconfig
+
+volumes:
+  postgres_data:
+  temporal_config:

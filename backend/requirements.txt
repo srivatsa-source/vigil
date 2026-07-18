@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+temporalio
+sqlalchemy
+asyncpg
+pydantic
+pydantic-settings
+groq
